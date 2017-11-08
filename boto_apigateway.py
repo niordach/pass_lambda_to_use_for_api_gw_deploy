@@ -1577,7 +1577,12 @@ class _Swagger(object):
 
         lambda_uri = ""
         if method_name.lower() != 'options':
-            lambda_uri = self._lambda_uri(self._lambda_name(resource_path, method_name),
+
+            lambda_core_name = resource_path
+            if 'lambda' in method_data:
+                lambda_core_name = method_data['lambda']
+
+            lambda_uri = self._lambda_uri(self._lambda_name(lambda_core_name, method_name),
                                           lambda_region=lambda_region)
 
         # NOTE: integration method is set to POST always, as otherwise AWS makes wrong assumptions
