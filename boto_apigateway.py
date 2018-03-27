@@ -1509,8 +1509,14 @@ class _Swagger(object):
             response_header = 'method.response.header.{0}'.format(header)
             method_response_params[response_header] = False
             header_data = method_response.headers.get(header)
-            method_integration_response_params[response_header] = (
-                "'{0}'".format(header_data.get('default')) if 'default' in header_data else "'*'")
+            if 'default' in header_data:
+                method_integration_response_params[response_header] = \
+                    "'{0}'".format(header_data.get('default'))
+            elif 'integration' in header_data:
+                method_integration_response_params[response_header] = \
+                    "integration.{0}".format(header_data.get('integration'))
+            else:
+                method_integration_response_params[response_header] = "'*'"
 
         response_templates = self._get_response_template(method_name, httpStatus)
 
